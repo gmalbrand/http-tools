@@ -22,25 +22,38 @@ Dump the request headers and body in the response.
 ### cpuLoad and memLoad URIs
 Generate load on the server
 - cpuLoad : generate cpu usage (parameter load, percentage, default 80%) for a period of time (parameter duration, in second, default 10s)
+Example: 
+```
+ curl http://localhost:8080/cpuLoad?load=120&duration=60
+```
+
 - memLoad : generate memory usage (parameter size, in MB, default 80) for a period of time (parameter duration, in second, default 10s)
+Example:
+```
+ curl http://localhost:8080/cpuLoad?mem=1024&duration=60
+```
 
 ### proxy URI
 Simple HTTP proxy. Not tested.
 
 ### Build and run
 Build from make file
-`
-    make dep http-mirror
-`
+```
+make dep http-mirror
+```
 
 Run on default port 8080 
-`./bin/http-mirror`
+```
+./bin/http-mirror
+```
 Run on custom port 
-`HTTP_SEVER_PORT=4242 ./bin/http-mirror`
+```
+HTTP_SEVER_PORT=4242 ./bin/http-mirror
+```
 
 ## Certificate generator
 Generate CA cert and keys and self signed certificates.
 
-`
+```
 make dep certgen
-`
+```
