@@ -11,10 +11,9 @@ import (
 )
 
 var (
-	output       = flag.String("output", "/tmp", "Certificate will be saved to this directory")
-	timeToLive   = flag.Int("ttl", 30, "Time to live in days")
-	organization = flag.String("organization", "dilizone.org", "Certificates' Organization")
-	filePrefix   = flag.String("prefix", "certgen", "File prefix")
+	output     = flag.String("output", "/tmp", "Certificate will be saved to this directory")
+	timeToLive = flag.Int("ttl", 30, "Time to live in days")
+	filePrefix = flag.String("prefix", "certgen", "File prefix")
 )
 
 func main() {

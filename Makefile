@@ -1,7 +1,7 @@
 SUBDIRS = $(notdir $(wildcard ./cmd/*))
 
 .PHONY: all
-all: dep build
+all: clean dep build
 
 .PHONY: build
 build: $(addprefix ./bin/, $(SUBDIRS))

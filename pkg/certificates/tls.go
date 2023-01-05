@@ -21,12 +21,12 @@ func NewCertificateTemplate(caCert bool, timeToLive int) *x509.Certificate {
 	return &x509.Certificate{
 		SerialNumber: big.NewInt(int64(time.Now().Year())),
 		Subject: pkix.Name{
-			Organization:  []string{"Dilizone"},
-			Country:       []string{"FR"},
+			Organization:  []string{""},
+			Country:       []string{""},
 			Province:      []string{""},
-			Locality:      []string{"Paris"},
-			StreetAddress: []string{"Opera"},
-			PostalCode:    []string{"75009"},
+			Locality:      []string{""},
+			StreetAddress: []string{""},
+			PostalCode:    []string{""},
 		},
 		NotBefore:             time.Now(),
 		NotAfter:              time.Now().AddDate(0, 0, timeToLive),

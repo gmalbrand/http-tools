@@ -5,7 +5,7 @@ WORKDIR /app
 
 ADD . .
 
-RUN make clean all
+RUN make all
 
 ## Deploy
 FROM gcr.io/distroless/base-debian11
