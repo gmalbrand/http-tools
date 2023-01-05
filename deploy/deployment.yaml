@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: http-mirror
+  name: http-mirror
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: http-mirror
+  template:
+    metadata:
+      labels:
+        app: http-mirror
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port:   '8080'
+        prometheus.io/app-metrics: 'true'
+        prometheus.io/app-metrics-path: '/metrics'
+        k8s.monitor.config.scalyr.com/scrape: 'true'
+        log.config.scalyr.com/attributes.parser: accessLog
+        k8s.monitor.config.scalyr.com/scrape_interval: '1'
+        k8s.monitor.config.scalyr.com/attributes: '{"namespace": "http-mirror", "app": "${pod_labels_app}", "image": "gmalbrand/http-mirror:latest"}'
+    spec:
+      containers:
+      - image: gmalbrand/http-mirror:latest
+        name: http-mirror
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http-mirror-cport
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 250m
+            memory: 100Mi
+          limits:
+            cpu: 500m
+            memory: 250Mi
+        readinessProbe:
+          tcpSocket:
+            port: http-mirror-cport
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: http-mirror-cport
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: http-mirror
+  name: http-mirror
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: http-mirror-cport
+  selector:
+    app: http-mirror
+  type: LoadBalancer
