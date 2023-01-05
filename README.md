@@ -36,7 +36,7 @@ Example:
 ### proxy URI
 Simple HTTP proxy. Not tested.
 
-### Build and run
+### Build and run locally
 Build from make file
 ```
 make dep http-mirror
@@ -49,6 +49,21 @@ Run on default port 8080
 Run on custom port 
 ```
 HTTP_SEVER_PORT=4242 ./bin/http-mirror
+```
+
+### Use with docker
+Use the latest docker image available on docker hub.
+```
+    docker run -d -p 8080:8080 gmalbrand/http-mirror:latest 
+```
+
+### Deploy on k8s
+The given manifest creates a deployment set with 2 replicas and load balancer service
+The pods have prometheus and DataSet annoations for metric collection
+
+```
+    kubectl create namespace "your-namespace"
+    kubectl apply -f ./deploy/deployment.yaml -n "your-namespace"
 ```
 
 ## Certificate generator
