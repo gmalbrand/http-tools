@@ -27,7 +27,7 @@ Use the latest docker image available on docker hub.
 ```
 
 ### Deploy on k8s
-The given manifest creates a deployment set with 2 replicas and load balancer service
+The given manifest creates a deployment set with 2 replicas and load balancer service.
 The pods have prometheus and DataSet annoations for metric collection
 
 ```
@@ -37,7 +37,7 @@ The pods have prometheus and DataSet annoations for metric collection
 
 ## URIs
 
-### Metrics URI 
+### /metrics
 Expose promhttp metrics
 Custom metrics :
 - http_requests_in_flight : A gauge of requests currently being served by the wrapped handler. 
@@ -46,18 +46,39 @@ Custom metrics :
 - http_response_size_bytes : A histogram of response sizes for requests.
 - http_request_size_bytes : A histogram of requests sizes.
 
-### Dump URI
+### /dump
 Accept all method.
 Dump the request headers and body in the response.
+GET example :
+```
+curl http://localhost:8080/dump?param1=value1&param2=value2
+GET /dump?param1=value1&param2=value2 HTTP/1.1
+Host: localhost:8080
+Accept: */*
+User-Agent: curl/7.79.1
+```
 
-### cpuLoad and memLoad URIs
+POST example:
+```
+curl -X POST http://localhost:8080/dump -H 'Content-Type: application/json' -d '{"login":"my_login","password":"my_password"}'
+POST /dump HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Content-Length: 45
+Content-Type: application/json
+User-Agent: curl/7.79.1
+
+{"login":"my_login","password":"my_password"}
+```
+
+### /cpuLoad
 Generate load on the server
 - cpuLoad : generate cpu usage (parameter load, percentage, default 80%) for a period of time (parameter duration, in second, default 10s)
 Example: 
 ```
  curl http://localhost:8080/cpuLoad?load=120&duration=60
 ```
-
+### /memLoad
 - memLoad : generate memory usage (parameter size, in MB, default 80) for a period of time (parameter duration, in second, default 10s)
 Example:
 ```
@@ -65,7 +86,7 @@ Example:
 ```
 
 ### proxy URI
-Simple HTTP proxy. Not tested.
+Simple HTTP proxy. Almost untested.
 
 # Certificate generator
 Generate CA cert and keys and self signed certificates.
