@@ -17,19 +17,30 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func NewCertificateTemplate(caCert bool, timeToLive int) *x509.Certificate {
+type CertificateInfo struct {
+	Organization  string `yaml:"organization"`
+	Country       string `yaml:"country"`
+	Province      string `yaml:"province"`
+	Locality      string `yaml:"locality"`
+	StreetAddress string `yaml:"street-address"`
+	PostalCode    string `yaml:"postal-code"`
+	Validity      int    `yaml:"ttl"`
+	DNS           []string
+}
+
+func NewCertificateTemplate(caCert bool, certInfo CertificateInfo) *x509.Certificate {
 	return &x509.Certificate{
 		SerialNumber: big.NewInt(int64(time.Now().Year())),
 		Subject: pkix.Name{
-			Organization:  []string{""},
-			Country:       []string{""},
-			Province:      []string{""},
-			Locality:      []string{""},
-			StreetAddress: []string{""},
-			PostalCode:    []string{""},
+			Organization:  []string{certInfo.Organization},
+			Country:       []string{certInfo.Country},
+			Province:      []string{certInfo.Province},
+			Locality:      []string{certInfo.Locality},
+			StreetAddress: []string{certInfo.StreetAddress},
+			PostalCode:    []string{certInfo.PostalCode},
 		},
 		NotBefore:             time.Now(),
-		NotAfter:              time.Now().AddDate(0, 0, timeToLive),
+		NotAfter:              time.Now().AddDate(0, 0, certInfo.Validity),
 		IsCA:                  caCert,
 		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth},
 		KeyUsage:              x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
@@ -76,8 +87,8 @@ func ReadPrivateKey(filepath string) (*rsa.PrivateKey, error) {
 	return key, nil
 }
 
-func CreateSelfSignedCA(timeToLive int) (*x509.Certificate, *rsa.PrivateKey, error) {
-	caTemplate := NewCertificateTemplate(true, timeToLive)
+func CreateSelfSignedCA(certInfo CertificateInfo) (*x509.Certificate, *rsa.PrivateKey, error) {
+	caTemplate := NewCertificateTemplate(true, certInfo)
 	caPrivateKey, err := rsa.GenerateKey(rand.Reader, 4096)
 
 	if err != nil {
@@ -102,10 +113,10 @@ func CreateSelfSignedCA(timeToLive int) (*x509.Certificate, *rsa.PrivateKey, err
 	return caCert, caPrivateKey, nil
 }
 
-func CreateServerCertificate(caCert *x509.Certificate, caPrivateKey *rsa.PrivateKey, timeToLive int, dnsNames []string) (*x509.Certificate, *rsa.PrivateKey, error) {
-	certTemplate := NewCertificateTemplate(false, timeToLive)
-	certTemplate.DNSNames = dnsNames
-	certTemplate.Subject.CommonName = dnsNames[0]
+func CreateServerCertificate(caCert *x509.Certificate, caPrivateKey *rsa.PrivateKey, certInfo CertificateInfo) (*x509.Certificate, *rsa.PrivateKey, error) {
+	certTemplate := NewCertificateTemplate(false, certInfo)
+	certTemplate.DNSNames = certInfo.DNS
+	certTemplate.Subject.CommonName = certInfo.DNS[0]
 
 	serverPrivateKey, err := rsa.GenerateKey(rand.Reader, 4096)
 

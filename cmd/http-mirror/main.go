@@ -25,7 +25,7 @@ var (
 	version = os.Getenv("HTTP_DUMP_VERSION")
 )
 
-func dumpRequest(w http.ResponseWriter, req *http.Request) {
+func mirrorRequest(w http.ResponseWriter, req *http.Request) {
 	// Adding comment to generate a push and another one
 	var formatted, err = httputil.DumpRequest(req, true)
 
@@ -61,7 +61,7 @@ func main() {
 	mux := monitoring.NewMonitoredMux()
 
 	mux.HandleFunc("/", proxy.ProxyHandler)
-	mux.HandleFunc("/dump", dumpRequest)
+	mux.HandleFunc("/mirror", mirrorRequest)
 	mux.HandleFunc("/info", info)
 	mux.HandleFunc("/cpuLoad", LoadGenerator.GenerateCPULoad)
 	mux.HandleFunc("/memLoad", LoadGenerator.GenerateMemLoad)

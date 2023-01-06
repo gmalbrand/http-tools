@@ -46,12 +46,12 @@ Custom metrics :
 - http_response_size_bytes : A histogram of response sizes for requests.
 - http_request_size_bytes : A histogram of requests sizes.
 
-### /dump
+### /mirror
 Accept all method.
 Dump the request headers and body in the response.
 GET example :
 ```
-curl http://localhost:8080/dump?param1=value1&param2=value2
+curl http://localhost:8080/mirror?param1=value1&param2=value2
 GET /dump?param1=value1&param2=value2 HTTP/1.1
 Host: localhost:8080
 Accept: */*
@@ -60,7 +60,7 @@ User-Agent: curl/7.79.1
 
 POST example:
 ```
-curl -X POST http://localhost:8080/dump -H 'Content-Type: application/json' -d '{"login":"my_login","password":"my_password"}'
+curl -X POST http://localhost:8080/mirror -H 'Content-Type: application/json' -d '{"login":"my_login","password":"my_password"}'
 POST /dump HTTP/1.1
 Host: localhost:8080
 Accept: */*
@@ -85,11 +85,12 @@ Example:
  curl http://localhost:8080/cpuLoad?mem=1024&duration=60
 ```
 
-### proxy URI
+### /
 Simple HTTP proxy. Almost untested.
 
 # Certificate generator
-Generate CA cert and keys and self signed certificates.
+Generate CA cert and keys and self signed certificates restricted to a list of domain names.
+These certificates can then be used within k8s cluster.
 
 ```
 make dep certgen
