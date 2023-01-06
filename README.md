@@ -93,5 +93,30 @@ Generate CA cert and keys and self signed certificates restricted to a list of d
 These certificates can then be used within k8s cluster.
 
 ```
-make dep certgen
+$> make dep certgen
+$> ./bin/certgen --help
+Usage of ./bin/certgen:
+  -country string
+    	Country of your organization
+  -locality string
+    	Locality of your organization
+  -organization string
+    	Name of your organization (Mandatory)
+  -output string
+    	Certificate will be saved to this directory (default "/tmp")
+  -postal-code string
+    	Postal code of your organization
+  -prefix string
+    	File prefix (default "certgen")
+  -province string
+    	Province of your organization
+  -street-address string
+    	Street address of your organization
+  -validity int
+    	Validity period in days (default 30 (default 30)
+
+$>./bin/certgen -organization dilizone.org dilizone.org
+
+$> ls /tmp/certgen-*
+/tmp/certgen-ca-cert.pem     /tmp/certgen-ca-key.pem      /tmp/certgen-server-cert.pem /tmp/certgen-server-key.pem
 ```
