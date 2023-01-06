@@ -1,6 +1,6 @@
 SUBDIRS = $(notdir $(wildcard ./cmd/*))
 IMAGE_NAME := $(addprefix gmalbrand/, $(notdir $(shell pwd)))
-IMAGE_VERSION := $(shell git tag -l v* | tail -1)
+IMAGE_VERSION := $(shell git tag --sort=committerdate -l v* | tail -1)
 
 .PHONY: all
 all: clean dep build
@@ -17,7 +17,7 @@ $(SUBDIRS): %:./bin/%
 dep:
 	go mod download
 
-.PHONY: clean 
+.PHONY: clean
 clean:
 	rm -rf ./bin
 
