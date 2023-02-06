@@ -1,12 +1,11 @@
 pipeline {
-  agent none
+  agent {label 'go'}
 
   environment {
     REPOSITORY='gmalbrand/http-tools'
   }
 
   stages {
-    agent {label 'go'}
     stage('Setup') {
       steps 'make clean dep'
     }
