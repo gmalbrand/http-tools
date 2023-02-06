@@ -21,6 +21,10 @@ dep:
 clean:
 	rm -rf ./bin
 
+.PHONY: test
+test:
+	go test ./pkg/... --cover -v -failfast
+
 .PHONY: docker-image
 docker-image:
 	docker build -t $(IMAGE_NAME):$(IMAGE_VERSION) -t $(IMAGE_NAME):latest -f build/Dockerfile .
