@@ -8,7 +8,7 @@ pipeline {
   stages {
     agent {label 'go'}
     stage('Setup') {
-      step 'make clean dep'
+      steps 'make clean dep'
     }
     stage('Build') {
       steps {
