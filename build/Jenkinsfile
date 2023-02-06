@@ -4,10 +4,12 @@ pipeline {
   environment {
     REPOSITORY='gmalbrand/http-tools'
   }
-  
-  stages {
+
+  stages{
     stage('Setup') {
-      steps 'make clean dep'
+      steps {
+        sh 'make clean dep'
+      }
     }
     stage('Build') {
       steps {
